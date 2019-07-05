@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="About" />
+        <item
+            android:id="@+id/nav_terms"
+            android:icon="@drawable/ic_terms"
+            android:title="Terms and conditions" />
+        <item
+            android:id="@+id/nav_rate_list"
+            android:icon="@drawable/ic_rate_list"
+            android:title="Rate List" />
+        <item
+            android:id="@+id/nav_service_area"
+            android:icon="@drawable/ic_service_area"
+            android:title="Service Area" />
+        <item
+            android:id="@+id/nav_faqs"
+            android:icon="@drawable/ic_faqs"
+            android:title="FAQs" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="Feedback" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help"
+            android:title="Need help" />
+    </group>
+
+
+</menu>

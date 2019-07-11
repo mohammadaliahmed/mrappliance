@@ -1,5 +1,6 @@
 package com.fixedit.fixitservices.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import com.fixedit.fixitservices.UserManagement.LoginMenu;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,6 +26,9 @@ import com.fixedit.fixitservices.R;
 import com.fixedit.fixitservices.Services.ListOfServices;
 import com.fixedit.fixitservices.UserManagement.EditProfile;
 import com.fixedit.fixitservices.Utils.SharedPrefs;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,16 +37,18 @@ public class MainActivity extends AppCompatActivity
     TextView newBooking, transactions, myProfile, bookingHistory;
     TextView username;
     RelativeLayout bookingCall;
+    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mDatabase=FirebaseDatabase.getInstance().getReference();
 
         username = findViewById(R.id.username);
         if (SharedPrefs.getUser() != null) {
             username.setText(SharedPrefs.getUser().getFullName());
+            mDatabase.child("Users").child(SharedPrefs.getUser().getUsername()).child("fcmKey").setValue(FirebaseInstanceId.getInstance().getToken());
         } else {
             username.setText("Fixed It");
 
@@ -166,6 +173,28 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_feedback) {
 
         } else if (id == R.id.nav_help) {
+
+        } else if (id == R.id.nav_logout) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Alert");
+            builder.setMessage("Sure to logout?");
+
+            // add the buttons
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    SharedPrefs.logout();
+                    Intent intent = new Intent(MainActivity.this, Splash.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
 
         }
 

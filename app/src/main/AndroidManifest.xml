@@ -44,6 +44,7 @@
         <activity android:name=".Activities.MyOrders" />
         <activity android:name=".Activities.BookingSumary" />
         <activity android:name=".Activities.ChooseAddress" />
+        <activity android:name=".Activities.ModifiedOrder"/>
         <activity
             android:name=".UserManagement.EditProfile"
             android:windowSoftInputMode="stateHidden" />

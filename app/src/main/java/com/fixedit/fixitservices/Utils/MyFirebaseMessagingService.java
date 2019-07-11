@@ -7,11 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.provider.Settings;
+
 import androidx.core.app.NotificationCompat;
+
 import android.util.Log;
 
 
 import com.fixedit.fixitservices.Activities.MainActivity;
+import com.fixedit.fixitservices.Activities.ModifiedOrder;
+import com.fixedit.fixitservices.Activities.MyOrders;
 import com.fixedit.fixitservices.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -74,16 +78,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         int num = (int) System.currentTimeMillis();
         /**Creates an explicit intent for an Activity in your app**/
         Intent resultIntent = null;
-//        if (type.equalsIgnoreCase("order")) {
-//            resultIntent = new Intent(this, Orders.class);
-//
-//        } else {
-//
-//            resultIntent = new Intent(this, MainActivity.class);
-//
-//        }
+        if (type.equalsIgnoreCase("Modify")) {
+            resultIntent = new Intent(this, ModifiedOrder.class);
+            resultIntent.putExtra("orderId", Id);
 
-        resultIntent = new Intent(this, MainActivity.class);
+        } else if (type.equalsIgnoreCase("jobDone")) {
+            resultIntent = new Intent(this, MyOrders.class);
+            resultIntent.putExtra("orderId", Id);
+
+        } else {
+
+            resultIntent = new Intent(this, MainActivity.class);
+
+        }
+
+//        resultIntent = new Intent(this, MainActivity.class);
 
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this,

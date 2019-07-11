@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fixedit.fixitservices.Models.AdminModel;
 import com.fixedit.fixitservices.Models.OrderModel;
 import com.fixedit.fixitservices.Models.ServiceCountModel;
 import com.fixedit.fixitservices.Models.User;
@@ -22,6 +23,7 @@ import com.fixedit.fixitservices.Services.ChooseServiceOptions;
 import com.fixedit.fixitservices.Services.ListOfSubServices;
 import com.fixedit.fixitservices.UserManagement.Register;
 import com.fixedit.fixitservices.Utils.CommonUtils;
+import com.fixedit.fixitservices.Utils.Constants;
 import com.fixedit.fixitservices.Utils.NotificationAsync;
 import com.fixedit.fixitservices.Utils.NotificationObserver;
 import com.fixedit.fixitservices.Utils.SharedPrefs;
@@ -48,6 +50,7 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
     int addressOption = 0;
     String adminFcmKey;
     RelativeLayout gogleAd;
+    private String number;
 
     @Override
     protected void onResume() {
@@ -135,7 +138,7 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
                     CommonUtils.showToast("Please choose one address");
                 } else {
                     wholeLayout.setVisibility(View.VISIBLE);
-                    OrderModel model = new OrderModel(
+                    final OrderModel model = new OrderModel(
                             orderId,
                             System.currentTimeMillis(),
                             SharedPrefs.getUser(),
@@ -159,28 +162,34 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
                     mDatabase.child("Orders").child("" + orderId).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            CommonUtils.sendMessage(number, "FIXEDIT \nNew " + model.getServiceName() + " order \nOrder Id: " + orderId
+                                    + "\n\nClick to view: \n" + Constants.FIXEDIT_URL + "admin/" + orderId);
+                            ;
+                            CommonUtils.sendMessage(SharedPrefs.getUser().getMobile(), "FIXEDIT\n\nOrder was successfully placed\n" +
+                                    "Order Id: " + model.getOrderId() + "\n\nYou will receive a call shortly for order confirmation");
                             mDatabase.child("TimeSlots")
                                     .child(CommonUtils.getYear(System.currentTimeMillis()))
                                     .child(finalOrderDate)
                                     .child(ChooseServiceOptions.timeSelected).setValue(ChooseServiceOptions.timeSelected);
 
                             mDatabase.child("Users").child(SharedPrefs.getUser().getUsername()).child("Orders").child("" + orderId).setValue(orderId);
-                            mDatabase.child("Users").child(SharedPrefs.getUser().getUsername()).child("Cart").removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    wholeLayout.setVisibility(View.GONE);
-                                    NotificationAsync notificationAsync = new NotificationAsync(ChooseAddress.this);
-                                    String notification_title = "New " + ListOfSubServices.parentService + " order from " + SharedPrefs.getUser().getFullName();
-                                    String notification_message = "Click to view";
-                                    notificationAsync.execute("ali", adminFcmKey, notification_title, notification_message, "Order", "" + orderId);
-                                    Intent i = new Intent(ChooseAddress.this, OrderPlaced.class);
-                                    i.putExtra("orderId", orderId);
-                                    i.putExtra("estimatedCost", finalTotalCost);
-                                    i.putExtra("estimatedTime", finalTotalTime);
-                                    startActivity(i);
-                                    finish();
-                                }
-                            });
+                            mDatabase.child("Users").child(SharedPrefs.getUser().getUsername()).child("Cart").removeValue()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            wholeLayout.setVisibility(View.GONE);
+                                            NotificationAsync notificationAsync = new NotificationAsync(ChooseAddress.this);
+                                            String notification_title = "New " + ListOfSubServices.parentService + " order from " + SharedPrefs.getUser().getFullName();
+                                            String notification_message = "Click to view";
+                                            notificationAsync.execute("ali", adminFcmKey, notification_title, notification_message, "Order", "" + orderId);
+                                            Intent i = new Intent(ChooseAddress.this, OrderPlaced.class);
+                                            i.putExtra("orderId", orderId);
+                                            i.putExtra("estimatedCost", finalTotalCost);
+                                            i.putExtra("estimatedTime", finalTotalTime);
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                    });
 
                         }
                     });
@@ -191,11 +200,17 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
     }
 
     private void getAdminFCMkey() {
-        mDatabase.child("Admin").child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Admin").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    adminFcmKey = dataSnapshot.getValue(String.class);
+                    AdminModel model = dataSnapshot.getValue(AdminModel.class);
+                    if (model != null) {
+                        adminFcmKey = model.getFcmKey();
+                        number = model.getAdminNumber();
+                        SharedPrefs.setAdminFcmKey(adminFcmKey);
+                    }
+
                 }
             }
 

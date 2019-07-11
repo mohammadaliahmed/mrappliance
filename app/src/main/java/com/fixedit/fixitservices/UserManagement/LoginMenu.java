@@ -236,7 +236,7 @@ public class LoginMenu extends AppCompatActivity implements GoogleApiClient.OnCo
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            String userOd = task.getResult().getUser().getUid();
+                            String userOd =profile.getFirstName()+profile.getLastName();
 //                            CommonUtils.showToast(task.getResult().getUser().getUid());
                             // Sign in success, update UI with the signed-in user's information
 //                            Log.d(TAG, "signInWithCredential:success");
@@ -251,7 +251,7 @@ public class LoginMenu extends AppCompatActivity implements GoogleApiClient.OnCo
                                 LoginManager.getInstance().logOut();
                             } else {
                                 Intent i = new Intent(LoginMenu.this, Register.class);
-                                i.putExtra("userId", userOd);
+                                i.putExtra("userId", profile.getFirstName()+profile.getLastName());
                                 i.putExtra("email", profile.getId());
                                 startActivity(i);
                                 LoginManager.getInstance().logOut();

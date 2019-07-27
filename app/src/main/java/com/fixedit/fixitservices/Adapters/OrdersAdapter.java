@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -17,6 +18,7 @@ import com.fixedit.fixitservices.Utils.CommonUtils;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,13 +54,34 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         } else {
             holder.viewBill.setVisibility(View.GONE);
         }
+        if (model.isJobDone()) {
+            holder.order.setText("Order Id: " + model.getOrderId()
+                    + "\n\nOrder Status: " + model.getOrderStatus()
+                    + "\n\nTotal amount: Rs." + model.getTotalPrice()
+            );
+        } else {
+            holder.order.setText("Order Id: " + model.getOrderId()
+                    + "\n\nOrder Status: " + model.getOrderStatus()
+                    + "\n\nEstimated cost: Rs" + model.getTotalPrice() + " - Rs" + (model.getTotalPrice() + 200));
 
-        holder.order.setText("Order Id: " + model.getOrderId()
-                + "\n\nOrder Status: " + model.getOrderStatus()
-                + "\n\nTotal amount: Rs." + model.getTotalPrice()
-        );
+        }
+
+
         holder.time.setText("Order Time: " + CommonUtils.getFormattedDate(model.getTime()));
         holder.serial.setText((position + 1) + ")");
+        if (model.isRated()) {
+            holder.ratingLayout.setVisibility(View.VISIBLE);
+            holder.ratingBar.setRating(model.getRating());
+        } else {
+            holder.ratingLayout.setVisibility(View.GONE);
+        }
+        if (model.isCancelled()) {
+            holder.cancelled.setVisibility(View.VISIBLE);
+            holder.cancelled.setText("Order Cancelled\nReason: " + model.getCancelReason());
+
+        } else {
+            holder.cancelled.setVisibility(View.GONE);
+        }
 
         if (model.getOrderStatus().equalsIgnoreCase("pending")) {
             holder.jobColor.setBackgroundColor(context.getResources().getColor(R.color.colorRed));
@@ -103,6 +126,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         TextView serial, order, time, viewBill;
         RecyclerView recycler_order_products;
         View jobColor;
+        LinearLayout ratingLayout;
+        AppCompatRatingBar ratingBar;
+        TextView cancelled;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -112,6 +138,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             time = itemView.findViewById(R.id.time);
             viewBill = itemView.findViewById(R.id.viewBill);
             jobColor = itemView.findViewById(R.id.jobColor);
+            ratingLayout = itemView.findViewById(R.id.ratingLayout);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+            cancelled = itemView.findViewById(R.id.cancelled);
         }
     }
 }

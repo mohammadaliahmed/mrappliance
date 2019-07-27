@@ -195,82 +195,14 @@
             </RadioGroup>
 
 
-            <RadioGroup
-                android:id="@+id/radioTime"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:orientation="vertical">
 
+                android:layout_gravity="center">
 
-                <RadioButton
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="7dp"
-                    android:background="@drawable/radio_flat_selector"
-                    android:button="@android:color/transparent"
-                    android:gravity="center"
-                    android:padding="2dp"
-                    android:text="10:00 am"
-                    android:textColor="@color/radio_flat_text_selector" />
-
-                <RadioButton
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
-                    android:background="@drawable/radio_flat_selector"
-                    android:button="@android:color/transparent"
-                    android:gravity="center"
-                    android:padding="2dp"
-                    android:text="12:00 pm"
-                    android:textColor="@color/radio_flat_text_selector" />
-
-                <RadioButton
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
-                    android:background="@drawable/radio_flat_selector"
-                    android:button="@android:color/transparent"
-                    android:gravity="center"
-                    android:padding="2dp"
-
-
-                    android:text="2:00 pm"
-                    android:textColor="@color/radio_flat_text_selector" />
-
-
-                <RadioButton
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
-                    android:background="@drawable/radio_flat_selector"
-                    android:button="@android:color/transparent"
-                    android:gravity="center"
-                    android:padding="2dp"
-
-                    android:text="4:00 pm"
-                    android:textColor="@color/radio_flat_text_selector" />
-
-                <RadioButton
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
-                    android:background="@drawable/radio_flat_selector"
-                    android:button="@android:color/transparent"
-                    android:gravity="center"
-                    android:padding="2dp"
-
-                    android:text="6:00 pm"
-                    android:textColor="@color/radio_flat_text_selector" />
-
-
-            </RadioGroup>
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:layout_width="wrap_content"

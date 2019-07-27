@@ -10,11 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fixedit.fixitservices.Models.AdminModel;
+import com.fixedit.fixitservices.Models.CouponModel;
 import com.fixedit.fixitservices.Models.OrderModel;
 import com.fixedit.fixitservices.Models.ServiceCountModel;
 import com.fixedit.fixitservices.Models.User;
@@ -35,6 +38,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ChooseAddress extends AppCompatActivity implements NotificationObserver {
     CheckBox googleCheckBox, addressCheckBox;
     TextView googleAddress, address;
@@ -51,6 +57,12 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
     String adminFcmKey;
     RelativeLayout gogleAd;
     private String number;
+    Button applyCoupon;
+    EditText couponCode;
+    HashMap<String, CouponModel> couponMap = new HashMap<>();
+    private boolean couponOk;
+    private CouponModel couponModel;
+    LinearLayout couponAppliedView, applyCouponView;
 
     @Override
     protected void onResume() {
@@ -64,6 +76,10 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_address);
 
+        applyCouponView = findViewById(R.id.applyCouponView);
+        couponAppliedView = findViewById(R.id.couponAppliedView);
+        couponCode = findViewById(R.id.couponCode);
+        applyCoupon = findViewById(R.id.applyCoupon);
         googleCheckBox = findViewById(R.id.googleCheckBox);
         addressCheckBox = findViewById(R.id.addressCheckBox);
         googleAddress = findViewById(R.id.googleAddress);
@@ -83,9 +99,20 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getOrderCountFromDB();
-        address.setText(SharedPrefs.getUser().getAddress());
+        address.setText(SharedPrefs.getUser().getGoogleAddress());
 //        googleAddress.setText(SharedPrefs.getUser().getGoogleAddress());
 
+
+        applyCoupon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (couponCode.getText().length() == 0) {
+                    couponCode.setError("Enter coupon");
+                } else {
+                    checkCoupon(couponCode.getText().toString());
+                }
+            }
+        });
 
         gogleAd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +154,7 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
         });
         calculateTotal();
         getAdminFCMkey();
+        getCouponsFromDb();
 
         placeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +181,10 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
                             SharedPrefs.getUser().getLat(),
                             SharedPrefs.getUser().getLon(),
                             ChooseServiceOptions.buildingType,
-                            ListOfSubServices.parentService
+                            ListOfSubServices.parentService,
+                            couponOk,
+                            couponOk ? couponModel.getCouponCode() : "",
+                            couponOk ? couponModel.getDiscount() : 0
 
                     );
 
@@ -198,6 +229,49 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
         });
 
     }
+
+    private void getCouponsFromDb() {
+        mDatabase.child("Coupons").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        CouponModel couponModel = snapshot.getValue(CouponModel.class);
+                        if (couponModel != null) {
+                            couponMap.put(couponModel.getCouponCode(), couponModel);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void checkCoupon(String s) {
+        if (couponMap.containsKey(s)) {
+            if (couponMap.get(s).isActive()) {
+                couponModel = couponMap.get(s);
+                if (System.currentTimeMillis()>couponModel.getCouponStartTime()  && System.currentTimeMillis()<couponModel.getCouponEndTime() ) {
+
+                    couponOk = true;
+                    CommonUtils.showToast("Coupon Applied");
+                    applyCouponView.setVisibility(View.GONE);
+                    couponAppliedView.setVisibility(View.VISIBLE);
+                } else {
+                    CommonUtils.showToast("Coupon is expired");
+                }
+            } else {
+                CommonUtils.showToast("You have used an expired coupon");
+            }
+        } else {
+            CommonUtils.showToast("Coupon does not exist or is invalid");
+        }
+    }
+
 
     private void getAdminFCMkey() {
         mDatabase.child("Admin").addListenerForSingleValueEvent(new ValueEventListener() {

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.fixedit.fixitservices.Activities.BookingSumary;
+import com.fixedit.fixitservices.Adapters.TimeslotsAdapter;
 import com.fixedit.fixitservices.R;
 import com.fixedit.fixitservices.Utils.CommonUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -36,18 +39,42 @@ public class ChooseServiceOptions extends AppCompatActivity {
     public static String buildingType;
     public static String timeSelected;
     public static String daySelected;
-    private RadioGroup radioTime;
-    private RadioButton radioButton;
     RadioButton day1, day2, day3;
     DatabaseReference mDatabase;
     HashMap<String, ArrayList<String>> map = new HashMap<>();
     String dayNo1, dayNo2, dayNo3;
 
+
+    RecyclerView recyclerview;
+    TimeslotsAdapter adapter;
+    ArrayList<String> itemList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_service_options);
+        recyclerview = findViewById(R.id.recyclerview);
+        itemList.add("10:00 am");
+        itemList.add("12:00 pm");
+        itemList.add("2:00 pm");
+        itemList.add("4:00 pm");
+        itemList.add("6:00 pm");
+        itemList.add("8:00 pm");
+        itemList.add("10:00 pm");
+        itemList.add("12:00 am");
+        recyclerview.setLayoutManager(new GridLayoutManager(this, 2));
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        adapter = new TimeslotsAdapter(ChooseServiceOptions.this, itemList, new ArrayList<String>());
+        adapter.setCallback(new TimeslotsAdapter.TimeSlotsCallback() {
+            @Override
+            public void optionSelected(String timeChosen) {
+                timeSelected = timeChosen;
+            }
+        });
+        recyclerview.setAdapter(adapter);
+
 
         dayNo1 = CommonUtils.getDay(System.currentTimeMillis()) + CommonUtils.getDayName(System.currentTimeMillis());
         dayNo2 = CommonUtils.getDay(System.currentTimeMillis() + 86400000) + CommonUtils.getDayName(System.currentTimeMillis() + 86400000);
@@ -60,7 +87,6 @@ public class ChooseServiceOptions extends AppCompatActivity {
         commercialTick = findViewById(R.id.commercialTick);
         back = findViewById(R.id.back);
         next = findViewById(R.id.next);
-        radioTime = findViewById(R.id.radioTime);
         day1 = findViewById(R.id.day1);
         day2 = findViewById(R.id.day2);
         day3 = findViewById(R.id.day3);
@@ -70,28 +96,17 @@ public class ChooseServiceOptions extends AppCompatActivity {
         day3.setText(CommonUtils.getDay(System.currentTimeMillis() + 86400000 + 86400000) + "\n" + CommonUtils.getDayName(System.currentTimeMillis() + 86400000 + 86400000));
 
 
+
+
         day1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    for (int i = 0; i < 5; i++) {
-                        ((RadioButton) radioTime.getChildAt(i)).setEnabled(true);
-                    }
-                    daySelected = day1.getText().toString();
-                    ArrayList<String> list = map.get(dayNo1)==null?new ArrayList<String>():map.get(dayNo1);
-                    for (String item : list) {
-                        if (item.equalsIgnoreCase("10:00 am")) {
-                            ((RadioButton) radioTime.getChildAt(0)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("12:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(1)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("2:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(2)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("4:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(3)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("6:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(4)).setEnabled(false);
-                        }
-                    }
+                                        daySelected = day1.getText().toString();
+                    ArrayList<String> list = map.get(dayNo1) == null ? new ArrayList<String>() : map.get(dayNo1);
+                    adapter.setUnavailableTime(list);
+
+
                 }
             }
         });
@@ -99,24 +114,12 @@ public class ChooseServiceOptions extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    for (int i = 0; i < 5; i++) {
-                        ((RadioButton) radioTime.getChildAt(i)).setEnabled(true);
-                    }
+
                     daySelected = day2.getText().toString();
-                    ArrayList<String> list = map.get(dayNo2)==null?new ArrayList<String>():map.get(dayNo2);
-                    for (String item : list) {
-                        if (item.equalsIgnoreCase("10:00 am")) {
-                            ((RadioButton) radioTime.getChildAt(0)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("12:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(1)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("2:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(2)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("4:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(3)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("6:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(4)).setEnabled(false);
-                        }
-                    }
+                    ArrayList<String> list = map.get(dayNo2) == null ? new ArrayList<String>() : map.get(dayNo2);
+                    adapter.setUnavailableTime(list);
+
+
                 }
             }
         });
@@ -124,24 +127,10 @@ public class ChooseServiceOptions extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    for (int i = 0; i < 5; i++) {
-                        ((RadioButton) radioTime.getChildAt(i)).setEnabled(true);
-                    }
                     daySelected = day3.getText().toString();
-                    ArrayList<String> list = map.get(dayNo3)==null?new ArrayList<String>():map.get(dayNo3);
-                    for (String item : list) {
-                        if (item.equalsIgnoreCase("10:00 am")) {
-                            ((RadioButton) radioTime.getChildAt(0)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("12:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(1)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("2:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(2)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("4:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(3)).setEnabled(false);
-                        } else if (item.equalsIgnoreCase("6:00 pm")) {
-                            ((RadioButton) radioTime.getChildAt(4)).setEnabled(false);
-                        }
-                    }
+                    ArrayList<String> list = map.get(dayNo3) == null ? new ArrayList<String>() : map.get(dayNo3);
+                    adapter.setUnavailableTime(list);
+
                 }
             }
         });
@@ -169,15 +158,14 @@ public class ChooseServiceOptions extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectedId = radioTime.getCheckedRadioButtonId();
-                radioButton = (RadioButton) findViewById(selectedId);
-                if (radioButton == null) {
+
+                if (timeSelected == null) {
                     CommonUtils.showToast("Select available time slot");
 
                 } else if (buildingType == null) {
                     CommonUtils.showToast("Select building type");
                 } else {
-                    timeSelected = radioButton.getText().toString();
+
 
                     startActivity(new Intent(ChooseServiceOptions.this, BookingSumary.class));
                 }
@@ -251,20 +239,7 @@ public class ChooseServiceOptions extends AppCompatActivity {
                                 day1List.add(snapshot.getKey());
 
                             }
-                            for (String item : day1List) {
-                                if (item.equalsIgnoreCase("10:00 am")) {
-                                    ((RadioButton) radioTime.getChildAt(0)).setEnabled(false);
-                                } else if (item.equalsIgnoreCase("12:00 pm")) {
-                                    ((RadioButton) radioTime.getChildAt(1)).setEnabled(false);
-                                } else if (item.equalsIgnoreCase("2:00 pm")) {
-                                    ((RadioButton) radioTime.getChildAt(2)).setEnabled(false);
-                                } else if (item.equalsIgnoreCase("4:00 pm")) {
-                                    ((RadioButton) radioTime.getChildAt(3)).setEnabled(false);
-                                } else if (item.equalsIgnoreCase("6:00 pm")) {
-                                    ((RadioButton) radioTime.getChildAt(4)).setEnabled(false);
-                                }
-                            }
-
+                            adapter.setUnavailableTime(day1List);
                             map.put(dayNo1, day1List);
                             ArrayList<String> day1List2 = new ArrayList<>();
                             for (DataSnapshot snapshot : dataSnapshot.child(dayNo2).getChildren()) {

@@ -119,6 +119,8 @@ public class ModifiedOrder extends AppCompatActivity implements NotificationObse
 
                             notificationAsync1.execute("ali", serviceman.getFcmKey(), notification_title1, notification_message1, "Modify", "" + orderId);
                         }
+                        startActivity(new Intent(ModifiedOrder.this,MyOrders.class));
+                        finish();
                     }
                 });
 

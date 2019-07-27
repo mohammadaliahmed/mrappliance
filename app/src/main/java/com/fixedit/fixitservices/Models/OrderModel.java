@@ -22,12 +22,26 @@ public class OrderModel {
     boolean modifiedOrderConfirmed,assigned;
     String assignedTo;
 
+    String assignedToName;
+    boolean arrived;
+    long materialBill;
+    long jobEndTime;
+    boolean jobDone;
+    boolean rated;
+    float rating;
+    boolean couponApplied;
+    String couponCode;
+    int discount;
+    boolean cancelled;
+    String cancelReason;
 
     public OrderModel(long orderId, long time, User user, ArrayList<ServiceCountModel> countModelArrayList,
                       long totalPrice,long totalHours, String instructions, String date, String chosenTime,
                       String orderStatus, String orderAddress,
                       double lat, double lon,
-                      String buildingType,String serviceName) {
+                      String buildingType,String serviceName, boolean couponApplied,
+                              String couponCode,
+                              int discount) {
         this.orderId = orderId;
         this.time = time;
         this.user = user;
@@ -43,12 +57,110 @@ public class OrderModel {
         this.buildingType = buildingType;
         this.totalHours=totalHours;
         this.serviceName=serviceName;
+        this.couponApplied=couponApplied;
+        this.couponCode=couponCode;
+        this.discount=discount;
+
     }
 
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public boolean isCouponApplied() {
+        return couponApplied;
+    }
+
+    public void setCouponApplied(boolean couponApplied) {
+        this.couponApplied = couponApplied;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
 
     public OrderModel() {
     }
 
+    public String getAssignedToName() {
+        return assignedToName;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public boolean isRated() {
+        return rated;
+    }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
+    }
+
+    public void setAssignedToName(String assignedToName) {
+        this.assignedToName = assignedToName;
+    }
+
+    public boolean isArrived() {
+        return arrived;
+    }
+
+    public void setArrived(boolean arrived) {
+        this.arrived = arrived;
+    }
+
+    public long getMaterialBill() {
+        return materialBill;
+    }
+
+    public void setMaterialBill(long materialBill) {
+        this.materialBill = materialBill;
+    }
+
+    public long getJobEndTime() {
+        return jobEndTime;
+    }
+
+    public void setJobEndTime(long jobEndTime) {
+        this.jobEndTime = jobEndTime;
+    }
+
+    public boolean isJobDone() {
+        return jobDone;
+    }
+
+    public void setJobDone(boolean jobDone) {
+        this.jobDone = jobDone;
+    }
 
     public boolean isAssigned() {
         return assigned;

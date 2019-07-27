@@ -1,11 +1,14 @@
 package com.fixedit.fixitservices.Activities;
 
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 
+import com.fixedit.fixitservices.ApplicationClass;
 import com.fixedit.fixitservices.UserManagement.LoginMenu;
 import com.google.android.material.navigation.NavigationView;
 
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDatabase=FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         username = findViewById(R.id.username);
         if (SharedPrefs.getUser() != null) {
@@ -162,13 +165,23 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_about) {
             // Handle the camera action
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://firebasestorage.googleapis.com/v0/b/fixitservices-b8de0.appspot.com/o/pdf%2FAbout%20Us-FIXEDIT.pdf?alt=media&token=bc2ead68-19ee-49fb-9ec4-e1fe97a1e292"));
+            startActivity(i);
+
         } else if (id == R.id.nav_terms) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://firebasestorage.googleapis.com/v0/b/fixitservices-b8de0.appspot.com/o/pdf%2FPrivacy%20Policy-FIXEDIT.pdf?alt=media&token=7c13ef05-e899-4056-aa07-c1975de51229"));
+            startActivity(i);
 
         } else if (id == R.id.nav_rate_list) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://firebasestorage.googleapis.com/v0/b/fixitservices-b8de0.appspot.com/o/pdf%2FPrice%20list-FIXEDIT.pdf?alt=media&token=3fb8d030-875d-4f5f-bd80-aafb18b5140f"));
+            startActivity(i);
 
         } else if (id == R.id.nav_service_area) {
 
         } else if (id == R.id.nav_faqs) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://firebasestorage.googleapis.com/v0/b/fixitservices-b8de0.appspot.com/o/pdf%2FFAQs-FIXEDIT.pdf?alt=media&token=0aa770a9-a843-4f6d-94c8-67297d98da77"));
+            startActivity(i);
+
 
         } else if (id == R.id.nav_feedback) {
 
@@ -201,5 +214,14 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void downloadFile(String url, String filename) {
+        DownloadManager downloadManager = (DownloadManager) ApplicationClass.getInstance().getApplicationContext().getSystemService(DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+//        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename + ".pdf");
+        Long referene = downloadManager.enqueue(request);
     }
 }

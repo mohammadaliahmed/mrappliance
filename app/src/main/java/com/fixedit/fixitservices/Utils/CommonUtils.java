@@ -51,32 +51,32 @@ public class CommonUtils {
     }
 
     public static void sendMessage(String number, String message) {
-        String request = "https://bulksms.com.pk";
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(request)
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        RetrofitClient client = retrofit.create(RetrofitClient.class);
-        Call<Example> call = client.createTask(
-                "923458441448",
-                "5214",
-                "FIXEDIT"
-                , number,
-                message
-        );
-        call.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<Example> call, Throwable t) {
-
-            }
-        });
+//        String request = "https://bulksms.com.pk";
+////
+//        Retrofit.Builder builder = new Retrofit.Builder()
+//                .baseUrl(request)
+//                .addConverterFactory(GsonConverterFactory.create());
+//
+//        Retrofit retrofit = builder.build();
+//        RetrofitClient client = retrofit.create(RetrofitClient.class);
+//        Call<Example> call = client.createTask(
+//                "923458441448",
+//                "5214",
+//                "FIXEDIT"
+//                , number,
+//                message
+//        );
+//        call.enqueue(new Callback<Example>() {
+//            @Override
+//            public void onResponse(Call<Example> call, Response<Example> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Example> call, Throwable t) {
+//
+//            }
+//        });
 
     }
 

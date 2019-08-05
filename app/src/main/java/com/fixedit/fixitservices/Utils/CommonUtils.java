@@ -49,6 +49,21 @@ public class CommonUtils {
             }
         });
     }
+    public static boolean getWhichRateToCharge(String choosenTime) {
+
+        boolean isPeakTime = false;
+        if (choosenTime.equalsIgnoreCase("10:00 am")
+                || choosenTime.equalsIgnoreCase("12:00 pm")
+                || choosenTime.equalsIgnoreCase("2:00 pm")
+                || choosenTime.equalsIgnoreCase("4:00 pm")) {
+            isPeakTime=false;
+        }else{
+            isPeakTime=true;
+        }
+
+        return isPeakTime;
+
+    }
 
     public static void sendMessage(String number, String message) {
 //        String request = "https://bulksms.com.pk";

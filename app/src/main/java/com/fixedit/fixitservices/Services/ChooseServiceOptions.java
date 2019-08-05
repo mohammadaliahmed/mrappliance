@@ -55,14 +55,23 @@ public class ChooseServiceOptions extends AppCompatActivity {
         setContentView(R.layout.activity_choose_service_options);
         recyclerview = findViewById(R.id.recyclerview);
         itemList.add("10:00 am");
+        itemList.add("11:00 am");
         itemList.add("12:00 pm");
+        itemList.add("1:00 pm");
         itemList.add("2:00 pm");
+        itemList.add("3:00 pm");
         itemList.add("4:00 pm");
+        itemList.add("5:00 pm");
         itemList.add("6:00 pm");
+        itemList.add("7:00 pm");
         itemList.add("8:00 pm");
+        itemList.add("9:00 pm");
         itemList.add("10:00 pm");
+        itemList.add("11:00 pm");
         itemList.add("12:00 am");
-        recyclerview.setLayoutManager(new GridLayoutManager(this, 2));
+
+
+        recyclerview.setLayoutManager(new GridLayoutManager(this, 3));
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -96,13 +105,11 @@ public class ChooseServiceOptions extends AppCompatActivity {
         day3.setText(CommonUtils.getDay(System.currentTimeMillis() + 86400000 + 86400000) + "\n" + CommonUtils.getDayName(System.currentTimeMillis() + 86400000 + 86400000));
 
 
-
-
         day1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                                        daySelected = day1.getText().toString();
+                    daySelected = day1.getText().toString();
                     ArrayList<String> list = map.get(dayNo1) == null ? new ArrayList<String>() : map.get(dayNo1);
                     adapter.setUnavailableTime(list);
 

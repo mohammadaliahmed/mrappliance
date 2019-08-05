@@ -86,6 +86,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             resultIntent = new Intent(this, MyOrders.class);
             resultIntent.putExtra("orderId", Id);
 
+        } else if (type.equalsIgnoreCase("totalBill")) {
+            resultIntent = new Intent(this, MyOrders.class);
+            resultIntent.putExtra("orderId", Id);
+
+        } else if (type.equalsIgnoreCase("jobStart")) {
+            resultIntent = new Intent(this, MyOrders.class);
+            resultIntent.putExtra("orderId", Id);
+
         } else if (type.equalsIgnoreCase("Arrived")) {
             resultIntent = new Intent(this, MyOrders.class);
 //            resultIntent.putExtra("orderId", Id);
@@ -97,13 +105,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         } else {
 
-            resultIntent = new Intent(this, MainActivity.class);
+            resultIntent = new Intent(this, MyOrders.class);
 
         }
 
 //        resultIntent = new Intent(this, MainActivity.class);
 
-
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this,
                 0 /* Request code */, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);

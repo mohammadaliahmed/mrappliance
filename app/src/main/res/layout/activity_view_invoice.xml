@@ -7,18 +7,7 @@
     android:background="#fff"
     tools:context=".Activities.ViewInvoice">
 
-    <ImageView
-        android:id="@+id/back"
-
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/ic_back_arrow" />
-
-
     <ScrollView
-        android:layout_below="@id/back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -161,6 +150,34 @@
                         android:padding="8dp"
                         android:textColor="#000"
                         android:textSize="11sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/serviceName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/buildingType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -179,6 +196,7 @@
                         android:textColor="#000"
                         android:textSize="11sp" />
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -262,6 +280,38 @@
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <LinearLayout
+                    android:id="@+id/couponArea"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+
+                    <TextView
+                        android:id="@+id/couponCode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/discount"
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
 
                     android:layout_height="wrap_content"
@@ -288,6 +338,7 @@
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
                         android:padding="8dp"
+                        android:textStyle="bold"
                         android:textColor="#000"
                         android:textSize="11sp" />
                 </LinearLayout>

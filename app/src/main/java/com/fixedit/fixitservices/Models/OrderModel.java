@@ -19,7 +19,7 @@ public class OrderModel {
     String buildingType;
     long totalHours;
     String serviceName;
-    boolean modifiedOrderConfirmed,assigned;
+    boolean modifiedOrderConfirmed, assigned;
     String assignedTo;
 
     String assignedToName;
@@ -34,14 +34,22 @@ public class OrderModel {
     int discount;
     boolean cancelled;
     String cancelReason;
+    boolean commercialBuilding;
+    boolean jobStarted;
+    String googleAddress;
+    boolean jobFinish;
+    long jobStartTime;
+    boolean peakHour;
+    long serviceCharges;
+
 
     public OrderModel(long orderId, long time, User user, ArrayList<ServiceCountModel> countModelArrayList,
-                      long totalPrice,long totalHours, String instructions, String date, String chosenTime,
+                      long totalPrice, long totalHours, String instructions, String date, String chosenTime,
                       String orderStatus, String orderAddress,
                       double lat, double lon,
-                      String buildingType,String serviceName, boolean couponApplied,
-                              String couponCode,
-                              int discount) {
+                      String buildingType, String serviceName, boolean couponApplied,
+                      String couponCode,
+                      int discount, boolean commercialBuilding) {
         this.orderId = orderId;
         this.time = time;
         this.user = user;
@@ -55,12 +63,69 @@ public class OrderModel {
         this.lat = lat;
         this.lon = lon;
         this.buildingType = buildingType;
-        this.totalHours=totalHours;
-        this.serviceName=serviceName;
-        this.couponApplied=couponApplied;
-        this.couponCode=couponCode;
-        this.discount=discount;
+        this.totalHours = totalHours;
+        this.serviceName = serviceName;
+        this.couponApplied = couponApplied;
+        this.couponCode = couponCode;
+        this.discount = discount;
+        this.commercialBuilding = commercialBuilding;
 
+    }
+
+    public String getGoogleAddress() {
+        return googleAddress;
+    }
+
+    public void setGoogleAddress(String googleAddress) {
+        this.googleAddress = googleAddress;
+    }
+
+    public boolean isJobFinish() {
+        return jobFinish;
+    }
+
+    public void setJobFinish(boolean jobFinish) {
+        this.jobFinish = jobFinish;
+    }
+
+    public long getJobStartTime() {
+        return jobStartTime;
+    }
+
+    public void setJobStartTime(long jobStartTime) {
+        this.jobStartTime = jobStartTime;
+    }
+
+    public boolean isPeakHour() {
+        return peakHour;
+    }
+
+    public void setPeakHour(boolean peakHour) {
+        this.peakHour = peakHour;
+    }
+
+    public long getServiceCharges() {
+        return serviceCharges;
+    }
+
+    public void setServiceCharges(long serviceCharges) {
+        this.serviceCharges = serviceCharges;
+    }
+
+    public boolean isJobStarted() {
+        return jobStarted;
+    }
+
+    public void setJobStarted(boolean jobStarted) {
+        this.jobStarted = jobStarted;
+    }
+
+    public boolean isCommercialBuilding() {
+        return commercialBuilding;
+    }
+
+    public void setCommercialBuilding(boolean commercialBuilding) {
+        this.commercialBuilding = commercialBuilding;
     }
 
     public boolean isCancelled() {
@@ -306,7 +371,6 @@ public class OrderModel {
     public void setLon(double lon) {
         this.lon = lon;
     }
-
 
 
     public long getBillNumber() {

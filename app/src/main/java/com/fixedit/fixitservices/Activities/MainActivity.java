@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_rate_list) {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://firebasestorage.googleapis.com/v0/b/fixitservices-b8de0.appspot.com/o/pdf%2FPrice%20list-FIXEDIT.pdf?alt=media&token=3fb8d030-875d-4f5f-bd80-aafb18b5140f"));
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://firebasestorage.googleapis.com/v0/b/fixitservices-b8de0.appspot.com/o/pdf%2FPrice%20list-FIXEDIT%20(1).pdf?alt=media&token=4ac0a894-34a6-4762-9a8c-2de486ec11e9"));
             startActivity(i);
 
         } else if (id == R.id.nav_service_area) {

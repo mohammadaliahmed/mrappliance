@@ -112,7 +112,7 @@ public class LoginMenu extends AppCompatActivity implements GoogleApiClient.OnCo
 
 
 //        facebook.setReadPermissions("email", "public_profile");
-        facebook.setReadPermissions("email", "public_profile", "user_friends");
+        facebook.setReadPermissions("email", "public_profile");
 
 
         mCallbackManager = CallbackManager.Factory.create();

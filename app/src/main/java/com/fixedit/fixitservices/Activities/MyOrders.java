@@ -50,9 +50,11 @@ public class MyOrders extends AppCompatActivity {
     String orderId;
     int rating;
 
+    String newOrderId;
 
     private float rated;
     private OrderModel orderModel;
+    boolean dialogShown = false;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -78,16 +80,23 @@ public class MyOrders extends AppCompatActivity {
         recyclerview = findViewById(R.id.recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerview.setLayoutManager(layoutManager);
-        adapter = new OrdersAdapter(this, orderModelArrayList);
+        adapter = new OrdersAdapter(this, orderModelArrayList, new OrdersAdapter.AdapterCallbacks() {
+            @Override
+            public void onRating(OrderModel model) {
+                orderId = "" + model.getOrderId();
+                rating = 1;
+                getOrderDetailsFromDB();
+            }
+        });
         recyclerview.setAdapter(adapter);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("Users").child(SharedPrefs.getUser().getUsername()).child("Orders").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Users").child(SharedPrefs.getUser().getUsername()).child("Orders").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-
+                    orderModelArrayList.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         getOrdersFromDb(snapshot.getKey());
                     }
@@ -113,14 +122,17 @@ public class MyOrders extends AppCompatActivity {
     }
 
     private void getOrderDetailsFromDB() {
-        mDatabase.child("Orders").child(orderId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Orders").child(orderId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     orderModel = dataSnapshot.getValue(OrderModel.class);
                     if (orderModel != null) {
                         CommonUtils.showToast("Please rate the service");
-                        showRatingDialog(orderModel.getServiceName());
+                        if (!dialogShown) {
+                            showRatingDialog(orderModel.getServiceName());
+                        }
+
                     }
 
                 }
@@ -134,6 +146,7 @@ public class MyOrders extends AppCompatActivity {
     }
 
     private void showRatingDialog(String serviceName) {
+
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -158,6 +171,7 @@ public class MyOrders extends AppCompatActivity {
                 if (rated == 0) {
                     CommonUtils.showToast("Please rate the service");
                 } else {
+                    dialogShown = true;
                     sendDataToDb(comments.getText().toString());
                     dialog.dismiss();
                 }
@@ -194,20 +208,27 @@ public class MyOrders extends AppCompatActivity {
 
 
         );
-        mDatabase.child("Ratings").child(orderId).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+        newOrderId = orderId;
+        orderId = null;
+        mDatabase.child("Ratings").child(newOrderId).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                rating = 0;
+                orderId = null;
                 CommonUtils.showToast("Thanks for rating");
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("rated", true);
                 map.put("rating", rated);
-                mDatabase.child("Orders").child(orderId).updateChildren(map);
+                mDatabase.child("Orders").child(newOrderId).updateChildren(map);
+                rating = 0;
+                orderId = null;
+                finish();
             }
         });
     }
 
     private void getOrdersFromDb(String key) {
-        mDatabase.child("Orders").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Orders").child(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {

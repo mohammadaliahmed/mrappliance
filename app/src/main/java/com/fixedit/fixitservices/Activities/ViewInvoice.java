@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,8 +33,12 @@ public class ViewInvoice extends AppCompatActivity {
     InvoiceModel model;
 
     InvoiceListAdapter adapter;
-    ImageView back;
     RelativeLayout wholeLayout;
+
+    TextView serviceName, buildingType;
+    TextView couponCode, discount;
+    LinearLayout couponArea;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,14 @@ public class ViewInvoice extends AppCompatActivity {
         invoiceId = getIntent().getStringExtra("invoiceId");
         this.setTitle("Bill Number: " + invoiceId);
 
-        back = findViewById(R.id.back);
+
+        couponCode = findViewById(R.id.couponCode);
+        discount = findViewById(R.id.discount);
+        couponArea = findViewById(R.id.couponArea);
+        buildingType = findViewById(R.id.buildingType);
+        serviceName = findViewById(R.id.serviceName);
+
+
         billNumber = findViewById(R.id.billNumber);
         orderNumber = findViewById(R.id.orderNumber);
         date = findViewById(R.id.date);
@@ -58,14 +70,6 @@ public class ViewInvoice extends AppCompatActivity {
         total = findViewById(R.id.total);
         wholeLayout = findViewById(R.id.wholeLayout);
         recycler = findViewById(R.id.recycler);
-
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         getDataFromServer();
     }
@@ -88,6 +92,18 @@ public class ViewInvoice extends AppCompatActivity {
                         comments.setText("Comments: " + model.getOrder().getInstructions());
                         total.setText("Total Bill: Rs " + model.getOrder().getTotalPrice());
                         totalTime.setText("Total Time: " + model.getOrder().getTotalHours()+" hours");
+
+                        serviceName.setText("Service Type: " + model.getOrder().getServiceName());
+                        buildingType.setText("Building Type: " + model.getOrder().getBuildingType());
+                        if (model.getOrder().isCouponApplied()) {
+                            couponArea.setVisibility(View.VISIBLE);
+                            couponCode.setText("Coupon code: " +model.getOrder().getCouponCode());
+                            discount.setText("Discount: " + model.getOrder().getDiscount() + "%");
+                        } else {
+                            couponArea.setVisibility(View.GONE);
+                        }
+
+
                         recycler.setLayoutManager(new LinearLayoutManager(ViewInvoice.this, LinearLayoutManager.VERTICAL, false));
                         adapter = new InvoiceListAdapter(ViewInvoice.this, model.getOrder().getCountModelArrayList());
                         recycler.setAdapter(adapter);

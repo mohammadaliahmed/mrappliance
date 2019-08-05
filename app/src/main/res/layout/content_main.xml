@@ -96,6 +96,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/constance"
+                android:gravity="center"
                 android:padding="30dp"
                 android:text="New booking"
                 android:textColor="#000" />
@@ -118,7 +120,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/constance"
+                android:gravity="center"
                 android:padding="30dp"
+
                 android:text="Transactions"
                 android:textColor="#000" />
 
@@ -139,7 +144,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/constance"
+                android:gravity="center"
                 android:padding="30dp"
+
                 android:text="My profile"
                 android:textColor="#000" />
 
@@ -158,6 +166,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/constance"
+                android:gravity="center"
+
                 android:padding="25dp"
                 android:text="Booking History"
                 android:textColor="#000" />

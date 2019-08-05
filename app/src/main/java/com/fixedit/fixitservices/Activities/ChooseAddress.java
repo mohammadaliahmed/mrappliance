@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChooseAddress extends AppCompatActivity implements NotificationObserver {
-    CheckBox googleCheckBox, addressCheckBox;
+    //    CheckBox googleCheckBox, addressCheckBox;
     TextView googleAddress, address;
     Button placeOrder;
     DatabaseReference mDatabase;
@@ -63,6 +63,7 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
     private boolean couponOk;
     private CouponModel couponModel;
     LinearLayout couponAppliedView, applyCouponView;
+    TextView orderDetails;
 
     @Override
     protected void onResume() {
@@ -80,8 +81,9 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
         couponAppliedView = findViewById(R.id.couponAppliedView);
         couponCode = findViewById(R.id.couponCode);
         applyCoupon = findViewById(R.id.applyCoupon);
-        googleCheckBox = findViewById(R.id.googleCheckBox);
-        addressCheckBox = findViewById(R.id.addressCheckBox);
+        orderDetails = findViewById(R.id.orderDetails);
+//        googleCheckBox = findViewById(R.id.googleCheckBox);
+//        addressCheckBox = findViewById(R.id.addressCheckBox);
         googleAddress = findViewById(R.id.googleAddress);
         address = findViewById(R.id.address);
         placeOrder = findViewById(R.id.placeOrder);
@@ -99,7 +101,7 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getOrderCountFromDB();
-        address.setText(SharedPrefs.getUser().getGoogleAddress());
+        address.setText(SharedPrefs.getUser().getAddress());
 //        googleAddress.setText(SharedPrefs.getUser().getGoogleAddress());
 
 
@@ -123,35 +125,35 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
         });
 
 
-        addressCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.isPressed()) {
-                    if (isChecked) {
-                        addressOption = 1;
-                        googleCheckBox.setChecked(false);
-
-                    } else {
-                        addressOption = 2;
-                        googleCheckBox.setChecked(true);
-                    }
-                }
-            }
-        });
-        googleCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.isPressed()) {
-                    if (isChecked) {
-                        addressOption = 2;
-                        addressCheckBox.setChecked(false);
-                    } else {
-                        addressOption = 1;
-                        addressCheckBox.setChecked(true);
-                    }
-                }
-            }
-        });
+//        addressCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (buttonView.isPressed()) {
+//                    if (isChecked) {
+//                        addressOption = 1;
+//                        googleCheckBox.setChecked(false);
+//
+//                    } else {
+//                        addressOption = 2;
+//                        googleCheckBox.setChecked(true);
+//                    }
+//                }
+//            }
+//        });
+//        googleCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (buttonView.isPressed()) {
+//                    if (isChecked) {
+//                        addressOption = 2;
+//                        addressCheckBox.setChecked(false);
+//                    } else {
+//                        addressOption = 1;
+//                        addressCheckBox.setChecked(true);
+//                    }
+//                }
+//            }
+//        });
         calculateTotal();
         getAdminFCMkey();
         getCouponsFromDb();
@@ -162,7 +164,7 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
                 User us = SharedPrefs.getUser();
                 us.setFcmKey(FirebaseInstanceId.getInstance().getToken());
                 SharedPrefs.setUser(us);
-                if (addressOption == 0) {
+                if (SharedPrefs.getUser().getGoogleAddress() != null && SharedPrefs.getUser().getGoogleAddress().equalsIgnoreCase("")) {
                     CommonUtils.showToast("Please choose one address");
                 } else {
                     wholeLayout.setVisibility(View.VISIBLE);
@@ -177,14 +179,15 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
                             orderDate,
                             ChooseServiceOptions.timeSelected,
                             "Pending",
-                            addressOption == 1 ? SharedPrefs.getUser().getAddress() : SharedPrefs.getUser().getGoogleAddress(),
+                            SharedPrefs.getUser().getGoogleAddress(),
                             SharedPrefs.getUser().getLat(),
                             SharedPrefs.getUser().getLon(),
                             ChooseServiceOptions.buildingType,
                             ListOfSubServices.parentService,
                             couponOk,
                             couponOk ? couponModel.getCouponCode() : "",
-                            couponOk ? couponModel.getDiscount() : 0
+                            couponOk ? couponModel.getDiscount() : 0,
+                            ChooseServiceOptions.buildingType.equalsIgnoreCase("commercial")
 
                     );
 
@@ -255,12 +258,13 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
         if (couponMap.containsKey(s)) {
             if (couponMap.get(s).isActive()) {
                 couponModel = couponMap.get(s);
-                if (System.currentTimeMillis()>couponModel.getCouponStartTime()  && System.currentTimeMillis()<couponModel.getCouponEndTime() ) {
+                if (System.currentTimeMillis() > couponModel.getCouponStartTime() && System.currentTimeMillis() < couponModel.getCouponEndTime()) {
 
                     couponOk = true;
                     CommonUtils.showToast("Coupon Applied");
                     applyCouponView.setVisibility(View.GONE);
                     couponAppliedView.setVisibility(View.VISIBLE);
+                    calculateTotal();
                 } else {
                     CommonUtils.showToast("Coupon is expired");
                 }
@@ -313,7 +317,60 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
             finalTotalTime = h;
         }
 
-        finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getServiceBasePrice();
+        if (couponOk) {
+            if (CommonUtils.getWhichRateToCharge(ChooseServiceOptions.timeSelected)) {
+
+                if (ChooseServiceOptions.buildingType.equalsIgnoreCase("commercial")) {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getCommercialServicePeakPrice();
+
+                } else {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getPeakPrice();
+
+                }
+            } else {
+                if (ChooseServiceOptions.buildingType.equalsIgnoreCase("commercial")) {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getCommercialServicePrice();
+
+                } else {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getServiceBasePrice();
+
+                }
+            }
+             finalTotalCost = finalTotalCost - (finalTotalCost * couponModel.getDiscount() / 100);
+            orderDetails.setText("Total time will last for:" +
+                    " " + finalTotalTime + " - " + (finalTotalTime + 1) + "" +
+                    " hours and \ncost shall be: Rs" + finalTotalCost + " - Rs" + (finalTotalCost
+                    + 200)
+                    + "\n" + couponModel.getDiscount() + "% applied");
+        } else {
+            if (CommonUtils.getWhichRateToCharge(ChooseServiceOptions.timeSelected)) {
+
+                if (ChooseServiceOptions.buildingType.equalsIgnoreCase("commercial")) {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getCommercialServicePeakPrice();
+
+                } else {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getPeakPrice();
+
+                }
+            } else {
+                if (ChooseServiceOptions.buildingType.equalsIgnoreCase("commercial")) {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getCommercialServicePrice();
+
+                } else {
+                    finalTotalCost = finalTotalTime * ListOfSubServices.parentServiceModel.getServiceBasePrice();
+
+                }
+            }
+            orderDetails.setText("Total time will last for:" +
+                    " " + finalTotalTime + " - " + (finalTotalTime + 1) + "" +
+                    " hours and \ncost shall be: Rs" + finalTotalCost + " - Rs" + (finalTotalCost + 200));
+        }
+
+
+//        orderDetails.setText("Total time will last for:" +
+//                " " + finalTotalTime + " - " + (finalTotalTime + 1) + "" +
+//                " hours and \ncost shall be: Rs" + finalTotalCost + " - Rs" + (finalTotalCost + 200));
+
         return finalTotalCost;
     }
 

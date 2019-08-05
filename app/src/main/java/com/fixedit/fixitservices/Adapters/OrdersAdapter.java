@@ -32,9 +32,13 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     ArrayList<OrderModel> itemList;
     OrderedProductsLayout adapter;
 
-    public OrdersAdapter(Context context, ArrayList<OrderModel> itemList) {
+    AdapterCallbacks callbacks;
+    private boolean canRate;
+
+    public OrdersAdapter(Context context, ArrayList<OrderModel> itemList, AdapterCallbacks callbacks) {
         this.context = context;
         this.itemList = itemList;
+        this.callbacks = callbacks;
     }
 
     @NonNull
@@ -69,19 +73,20 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
         holder.time.setText("Order Time: " + CommonUtils.getFormattedDate(model.getTime()));
         holder.serial.setText((position + 1) + ")");
-        if (model.isRated()) {
-            holder.ratingLayout.setVisibility(View.VISIBLE);
-            holder.ratingBar.setRating(model.getRating());
-        } else {
-            holder.ratingLayout.setVisibility(View.GONE);
-        }
-        if (model.isCancelled()) {
-            holder.cancelled.setVisibility(View.VISIBLE);
-            holder.cancelled.setText("Order Cancelled\nReason: " + model.getCancelReason());
+//        if (model.isRated()) {
+//            holder.ratingLayout.setVisibility(View.VISIBLE);
+//            holder.ratingBar.setRating(model.getRating());
+//        } else {
+//            holder.ratingLayout.setVisibility(View.GONE);
+//        }
+//        if (model.isCancelled()) {
+//            holder.cancelled.setVisibility(View.VISIBLE);
+//            holder.cancelled.setText("Order Cancelled\nReason: " + model.getCancelReason());
+//
+//        } else {
+//            holder.cancelled.setVisibility(View.GONE);
+//        }
 
-        } else {
-            holder.cancelled.setVisibility(View.GONE);
-        }
 
         if (model.getOrderStatus().equalsIgnoreCase("pending")) {
             holder.jobColor.setBackgroundColor(context.getResources().getColor(R.color.colorRed));
@@ -114,7 +119,67 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         holder.recycler_order_products.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        holder.cancelled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (model.isJobDone() && !model.isRated()) {
+//                    showRatingDialog(model);
+//                }i
+                if (canRate){
+                    showRatingDialog(model);
+                }else{
 
+                }
+            }
+        });
+
+
+        if (model.isArrived() && !model.isCancelled() && !model.isJobStarted() && !model.isJobFinish() && !model.isJobDone() && !model.isRated()) {
+            holder.cancelled.setText("Serviceman arrived");
+            holder.cancelled.setVisibility(View.VISIBLE);
+            holder.ratingLayout.setVisibility(View.GONE);
+
+        } else if (!model.isArrived() && model.isCancelled() && !model.isJobStarted() && !model.isJobFinish() && !model.isJobDone() && !model.isRated()) {
+            holder.cancelled.setText("Service Cancelled\nReason: " + model.getCancelReason());
+            holder.cancelled.setVisibility(View.VISIBLE);
+            holder.ratingLayout.setVisibility(View.GONE);
+
+        } else if (model.isArrived() && !model.isCancelled() && model.isJobStarted() && !model.isJobFinish() && !model.isJobDone() && !model.isRated()) {
+            holder.cancelled.setText("Job is in progress");
+            holder.cancelled.setVisibility(View.VISIBLE);
+            holder.ratingLayout.setVisibility(View.GONE);
+
+        } else if (model.isArrived() && !model.isCancelled() && model.isJobStarted() && model.isJobFinish() && !model.isJobDone() && !model.isRated()) {
+            holder.cancelled.setText("Job finished");
+            holder.cancelled.setVisibility(View.VISIBLE);
+            holder.ratingLayout.setVisibility(View.GONE);
+
+        } else if (model.isArrived() && !model.isCancelled() && model.isJobStarted() && model.isJobFinish() && !model.isJobDone() && !model.isRated()) {
+            holder.cancelled.setText("Job finished");
+            holder.ratingLayout.setVisibility(View.GONE);
+
+            holder.cancelled.setVisibility(View.VISIBLE);
+        } else if (model.isArrived() && !model.isCancelled() && model.isJobStarted() && model.isJobFinish() && model.isJobDone() && !model.isRated()) {
+            holder.cancelled.setText("Job Done\nPlease rate the service");
+            canRate=true;
+            holder.cancelled.setVisibility(View.VISIBLE);
+            holder.ratingLayout.setVisibility(View.GONE);
+
+        } else if (model.isArrived() && !model.isCancelled() && model.isJobStarted() && model.isJobFinish() && model.isJobDone() && model.isRated()) {
+            holder.cancelled.setVisibility(View.GONE);
+            holder.ratingLayout.setVisibility(View.VISIBLE);
+            holder.ratingBar.setRating(model.getRating());
+        } else {
+            holder.cancelled.setVisibility(View.GONE);
+            holder.ratingLayout.setVisibility(View.GONE);
+
+        }
+
+
+    }
+
+    private void showRatingDialog(OrderModel model) {
+        callbacks.onRating(model);
     }
 
     @Override
@@ -142,5 +207,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             ratingBar = itemView.findViewById(R.id.ratingBar);
             cancelled = itemView.findViewById(R.id.cancelled);
         }
+    }
+
+    public interface AdapterCallbacks {
+        public void onRating(OrderModel model);
     }
 }

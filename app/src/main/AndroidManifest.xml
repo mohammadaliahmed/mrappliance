@@ -40,7 +40,8 @@
         <activity android:name=".Services.ListOfSubServices" />
         <activity android:name=".Services.ChooseServiceOptions" />
         <activity android:name=".Activities.GPSTrackerActivity" />
-        <activity android:name=".Activities.ViewInvoice" />
+        <activity android:name=".Activities.ViewInvoice"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activities.MyOrders" />
         <activity android:name=".Activities.BookingSumary" />
         <activity android:name=".Activities.ChooseAddress" />

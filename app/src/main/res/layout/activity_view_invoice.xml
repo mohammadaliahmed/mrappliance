@@ -330,6 +330,72 @@
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/perHourCost"
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:id="@+id/materialBill"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Mat.bill Rs 500"
+                        android:textColor="#000"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/materialPercent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="10% Mat. Bill : Rs 100"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tax"
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Tax: 2%"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+
+
+                    <TextView
                         android:id="@+id/total"
                         android:layout_width="0dp"
 
@@ -338,9 +404,9 @@
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:textStyle="bold"
                         android:textColor="#000"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 

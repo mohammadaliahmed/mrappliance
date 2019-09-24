@@ -56,36 +56,51 @@
             android:layout_marginLeft="10dp"></androidx.recyclerview.widget.RecyclerView>
 
         <TextView
+            android:id="@+id/cancelled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/recycler_order_products"
-            android:textColor="@color/colorRed"
             android:layout_margin="10dp"
             android:text=""
-            android:id="@+id/cancelled"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/colorRed"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/rate"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/cancelled"
+            android:layout_margin="5dp"
+            android:layout_toRightOf="@id/cancelled"
+            android:background="@drawable/button_green_bg"
+            android:inputType="text"
+            android:text="Rate"
+
+            android:textColor="#fff"
+            android:textSize="11sp"
+            android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/ratingLayout"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_below="@id/recycler_order_products"
             android:layout_margin="10dp"
-            android:visibility="gone"
-            android:id="@+id/ratingLayout"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="5dp"
                 android:text="You rated " />
 
             <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/ratingBar"
                 style="@style/Base.Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ratingBar"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp" />
         </LinearLayout>

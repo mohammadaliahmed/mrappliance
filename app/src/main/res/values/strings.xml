@@ -12,7 +12,8 @@
     <string name="title_activity_maps">Map</string>
 
     <!--<string name="facebook_app_id">849090152129341</string>-->
-    <string name="facebook_app_id" translatable="false">849090152129341</string>
-    <string name="fb_login_protocol_scheme">fb849090152129341</string>
+    <string name="facebook_app_id" translatable="false">410856366452895</string>
+    <string name="fb_login_protocol_scheme">fb410856366452895</string>
+    <string name="title_activity_maps2">Map</string>
 
 </resources>

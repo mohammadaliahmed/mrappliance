@@ -2,10 +2,12 @@ package com.fixed.fixitservices.Services;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,10 +15,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fixed.fixitservices.Activities.ChooseAddress;
 import com.fixed.fixitservices.AddToCartCallbacks;
 import com.fixed.fixitservices.Models.ServiceCountModel;
 import com.fixed.fixitservices.R;
 import com.fixed.fixitservices.Utils.CommonUtils;
+import com.fixed.fixitservices.Utils.ConnectivityManager;
 import com.fixed.fixitservices.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,7 +72,12 @@ public class ListOfSubServices extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (canGoNext) {
-                    startActivity(new Intent(ListOfSubServices.this, ChooseServiceOptions.class));
+                    if (ConnectivityManager.isNetworkConnected(ListOfSubServices.this)) {
+                        startActivity(new Intent(ListOfSubServices.this, ChooseServiceOptions.class));
+
+                    } else {
+                        CommonUtils.showToast("Please check internet connection");
+                    }
                 } else {
                     CommonUtils.showToast("Please select one service");
                 }
@@ -176,7 +185,7 @@ public class ListOfSubServices extends AppCompatActivity {
     }
 
     private void getUserCartProductsFromDB() {
-        if(SharedPrefs.getUser()!=null) {
+        if (SharedPrefs.getUser() != null) {
             mDatabase.child("Users").child(SharedPrefs.getUser().
                     getUsername()).child("Cart").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -219,7 +228,7 @@ public class ListOfSubServices extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         SubServiceModel model = snapshot.getValue(SubServiceModel.class);
                         if (model != null) {
-                            if(model.getParentService()!=null) {
+                            if (model.getParentService() != null) {
                                 if (model.getParentService().contains(parentService)) {
                                     itemList.add(model);
                                 }

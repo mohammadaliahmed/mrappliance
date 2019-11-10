@@ -59,5 +59,7 @@ public class Splash extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+//          <!--alias:fixitclient
+//        pass:fixitclient-->
     }
 }

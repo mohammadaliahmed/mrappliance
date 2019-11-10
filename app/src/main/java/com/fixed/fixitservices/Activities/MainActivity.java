@@ -16,6 +16,7 @@ import com.fixed.fixitservices.Models.PdfModel;
 import com.fixed.fixitservices.Models.ServicemanModel;
 import com.fixed.fixitservices.Notifications.NotificationHistory;
 import com.fixed.fixitservices.UserManagement.LoginMenu;
+import com.fixed.fixitservices.Utils.CommonUtils;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -288,12 +289,20 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_about) {
             // Handle the camera action
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getAboutUs()));
-            startActivity(i);
+            if (pdf.getAboutUs() != null) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getAboutUs()));
+                startActivity(i);
+            } else {
+                CommonUtils.showToast("Not available");
+            }
 
         } else if (id == R.id.nav_terms) {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getTerms()));
-            startActivity(i);
+            if (pdf.getTerms() != null) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getTerms()));
+                startActivity(i);
+            } else {
+                CommonUtils.showToast("Not available");
+            }
         } else if (id == R.id.nav_notifications) {
             if (SharedPrefs.getUser() != null) {
                 Intent i = new Intent(MainActivity.this, NotificationHistory.class);
@@ -306,21 +315,33 @@ public class MainActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.nav_rate_list) {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getRateList()));
-            startActivity(i);
+            if (pdf.getRateList() != null) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getRateList()));
+                startActivity(i);
 
+            } else {
+                CommonUtils.showToast("Not available");
+            }
         } else if (id == R.id.nav_social) {
             Intent i = new Intent(MainActivity.this, SocialScreen.class);
 
             startActivity(i);
 
         } else if (id == R.id.nav_service_area) {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getServiceArea()));
-            startActivity(i);
+            if (pdf.getServiceArea() != null) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getServiceArea()));
+                startActivity(i);
+            } else {
+                CommonUtils.showToast("Not available");
+            }
         } else if (id == R.id.nav_faqs) {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getFaqs()));
-            startActivity(i);
+            if (pdf.getFaqs() != null) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf.getFaqs()));
+                startActivity(i);
 
+            } else {
+                CommonUtils.showToast("Not available");
+            }
 
         } else if (id == R.id.nav_feedback) {
 

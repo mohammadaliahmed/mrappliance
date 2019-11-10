@@ -2,6 +2,7 @@ package com.fixed.fixitservices.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -30,6 +31,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -82,11 +84,27 @@ public class MyOrders extends AppCompatActivity {
                 rating = 1;
                 getOrderDetailsFromDB();
             }
+
+            @Override
+            public void onCancel(OrderModel model) {
+                showCancelAlert(model.getOrderId());
+
+            }
         });
         recyclerview.setAdapter(adapter);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        getOrdersOfUser();
+
+        if (orderId != null && rating == 1) {
+            getOrderDetailsFromDB();
+
+        }
+
+    }
+
+    private void getOrdersOfUser() {
         mDatabase.child("Users").child(SharedPrefs.getUser().getUsername()).child("Orders").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -108,11 +126,33 @@ public class MyOrders extends AppCompatActivity {
 
             }
         });
+    }
 
-        if (orderId != null && rating == 1) {
-            getOrderDetailsFromDB();
+    private void showCancelAlert(final long orderId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert");
+        builder.setMessage("Do you want to cancel booking? ");
 
-        }
+        // add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                orderModelArrayList.clear();
+                adapter.notifyDataSetChanged();
+                mDatabase.child("Orders").child("" + orderId).child("orderStatus").setValue("Cancelled").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Order marked as cancelled");
+                        getOrdersOfUser();
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 

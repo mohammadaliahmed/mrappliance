@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -53,6 +54,20 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     public void onBindViewHolder(@NonNull OrdersAdapter.ViewHolder holder, int position) {
         final OrderModel model = itemList.get(position);
 
+
+        if (System.currentTimeMillis() - model.getTime() > 120000) {
+            holder.cancel.setVisibility(View.GONE);
+        } else {
+            holder.cancel.setVisibility(View.VISIBLE);
+
+        }
+
+        holder.cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callbacks.onCancel(model);
+            }
+        });
         if (model.getBillNumber() != 0) {
             holder.viewBill.setVisibility(View.VISIBLE);
         } else {
@@ -204,9 +219,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         AppCompatRatingBar ratingBar;
         TextView cancelled;
         Button rate;
+        ImageView cancel;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            cancel = itemView.findViewById(R.id.cancel);
             serial = itemView.findViewById(R.id.serial);
             recycler_order_products = itemView.findViewById(R.id.recycler_order_products);
             order = itemView.findViewById(R.id.order);
@@ -222,5 +239,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
     public interface AdapterCallbacks {
         public void onRating(OrderModel model);
+        public void onCancel(OrderModel model);
     }
 }

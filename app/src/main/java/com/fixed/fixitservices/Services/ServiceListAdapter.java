@@ -2,8 +2,10 @@ package com.fixed.fixitservices.Services;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.fixed.fixitservices.Activities.ChooseAddress;
 import com.fixed.fixitservices.R;
+import com.fixed.fixitservices.Utils.CommonUtils;
+import com.fixed.fixitservices.Utils.ConnectivityManager;
 
 import java.util.ArrayList;
 
@@ -41,16 +46,19 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
         Glide.with(context).load(model.getImageUrl()).into(holder.image);
 
 
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, ListOfSubServices.class);
-                i.putExtra("parentService", model.getId());
-                context.startActivity(i);
+                if (ConnectivityManager.isNetworkConnected(context)) {
+                    Intent i = new Intent(context, ListOfSubServices.class);
+                    i.putExtra("parentService", model.getId());
+                    context.startActivity(i);
+                } else {
+                    CommonUtils.showToast("Please check internet connection");
+                }
+
             }
         });
-
 
 
     }

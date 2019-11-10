@@ -16,9 +16,11 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 
 import com.fixed.fixitservices.Activities.BookingSumary;
+import com.fixed.fixitservices.Activities.ChooseAddress;
 import com.fixed.fixitservices.Adapters.TimeslotsAdapter;
 import com.fixed.fixitservices.R;
 import com.fixed.fixitservices.Utils.CommonUtils;
+import com.fixed.fixitservices.Utils.ConnectivityManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -198,8 +200,11 @@ public class ChooseServiceOptions extends AppCompatActivity {
                     CommonUtils.showToast("Select building type");
                 } else {
 
-
-                    startActivity(new Intent(ChooseServiceOptions.this, BookingSumary.class));
+                    if (ConnectivityManager.isNetworkConnected(ChooseServiceOptions.this)) {
+                        startActivity(new Intent(ChooseServiceOptions.this, BookingSumary.class));
+                    } else {
+                        CommonUtils.showToast("Please check internet connection");
+                    }
                 }
             }
         });

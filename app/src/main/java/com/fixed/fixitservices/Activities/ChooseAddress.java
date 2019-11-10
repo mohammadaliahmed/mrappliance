@@ -25,6 +25,7 @@ import com.fixed.fixitservices.R;
 import com.fixed.fixitservices.Services.ChooseServiceOptions;
 import com.fixed.fixitservices.Services.ListOfSubServices;
 import com.fixed.fixitservices.Utils.CommonUtils;
+import com.fixed.fixitservices.Utils.ConnectivityManager;
 import com.fixed.fixitservices.Utils.Constants;
 import com.fixed.fixitservices.Utils.GetAddress;
 import com.fixed.fixitservices.Utils.NotificationAsync;
@@ -179,8 +180,11 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                placeOrderNow();
-
+                if (ConnectivityManager.isNetworkConnected(ChooseAddress.this)) {
+                    placeOrderNow();
+                } else {
+                    CommonUtils.showToast("Please check internet connection");
+                }
             }
         });
         builder.setNegativeButton("Cancel", null);
@@ -320,6 +324,7 @@ public class ChooseAddress extends AppCompatActivity implements NotificationObse
                 if (dataSnapshot.getValue() != null) {
                     adminModel = dataSnapshot.getValue(AdminModel.class);
                     if (adminModel != null) {
+                        SharedPrefs.setAdminModel(adminModel);
                         adminFcmKey = adminModel.getFcmKey();
                         number = adminModel.getAdminNumber();
                         SharedPrefs.setAdminFcmKey(adminFcmKey);

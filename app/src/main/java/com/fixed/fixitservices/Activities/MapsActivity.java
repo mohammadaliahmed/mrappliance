@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.fixed.fixitservices.Models.User;
 import com.fixed.fixitservices.R;
 import com.fixed.fixitservices.Utils.CommonUtils;
+import com.fixed.fixitservices.Utils.GetAddress;
 import com.fixed.fixitservices.Utils.SharedPrefs;
 import com.google.android.gms.common.api.Status;
 
@@ -50,7 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     FloatingActionButton takeMeToCurrent;
     private LocationManager manager;
-    boolean flag=false;
+    boolean flag = false;
 
     @Override
     protected void onResume() {
@@ -85,7 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             CommonUtils.showToast("Please turn on GPS");
             final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
-            flag=true;
+            flag = true;
 
         } else {
             getPermissions();
@@ -115,7 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
 
-//                CommonUtils.showToast( "Place: " + place.getName() + ", " + place.getId());
+//                CommonUtils.showToast("Place: " + place.getName() + ", " + place.getId());
 
 
                 LatLng newPosition = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
@@ -135,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         takeMeToCurrent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(flag) {
+                if (flag) {
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         CommonUtils.showToast("Please turn on GPS");
                         final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -144,8 +145,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     } else {
                         getPermissions();
                     }
-                    flag=false;
-                }else {
+                    flag = false;
+                } else {
                     LatLng newPosition = new LatLng(origLat, origLon);
 //                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newPosition, 16));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newPosition, 16));
@@ -174,19 +175,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("address", CommonUtils.getFullAddress(MapsActivity.this, lat, lng));
-                intent.putExtra("lat", lat);
-                intent.putExtra("lon", lng);
-                User user = SharedPrefs.getUser();
-                if (user != null) {
-                    user.setGoogleAddress(CommonUtils.getFullAddress(MapsActivity.this, lat, lng));
-                    user.setLat(lat);
-                    user.setLon(lng);
+                String city = GetAddress.getCity(MapsActivity.this, lat, lng);
+                if (!SharedPrefs.getAdminModel().getProvidingServiceInCities().contains(city)) {
+                    CommonUtils.showToast("We are not providing services in this area");
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra("address", CommonUtils.getFullAddress(MapsActivity.this, lat, lng));
+                    intent.putExtra("lat", lat);
+                    intent.putExtra("lon", lng);
+
+                    User user = SharedPrefs.getUser();
+                    if (user != null) {
+                        user.setGoogleAddress(CommonUtils.getFullAddress(MapsActivity.this, lat, lng));
+                        user.setLat(lat);
+                        user.setLon(lng);
+                    }
+                    SharedPrefs.setUser(user);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
-                SharedPrefs.setUser(user);
-                setResult(RESULT_OK, intent);
-                finish();
             }
         });
 

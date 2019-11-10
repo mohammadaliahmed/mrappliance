@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 
 import com.fixed.fixitservices.ApplicationClass;
+import com.fixed.fixitservices.Models.AdminModel;
 import com.fixed.fixitservices.Models.User;
 import com.google.gson.Gson;
 
@@ -72,6 +73,20 @@ public class SharedPrefs {
     public static User getUser() {
         Gson gson = new Gson();
         User customer = gson.fromJson(preferenceGetter("customerModel"), User.class);
+
+        return customer;
+    }
+
+    public static void setAdminModel(AdminModel model) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(model);
+        preferenceSetter("admin", json);
+    }
+
+    public static AdminModel getAdminModel() {
+        Gson gson = new Gson();
+        AdminModel customer = gson.fromJson(preferenceGetter("admin"), AdminModel.class);
 
         return customer;
     }

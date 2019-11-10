@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,6 +17,8 @@ import com.fixed.fixitservices.Adapters.ServicesBookedAdapter;
 import com.fixed.fixitservices.R;
 import com.fixed.fixitservices.Services.ChooseServiceOptions;
 import com.fixed.fixitservices.Services.ListOfSubServices;
+import com.fixed.fixitservices.Utils.CommonUtils;
+import com.fixed.fixitservices.Utils.ConnectivityManager;
 
 public class BookingSumary extends AppCompatActivity {
 
@@ -45,14 +48,18 @@ public class BookingSumary extends AppCompatActivity {
         serviceType = findViewById(R.id.serviceType);
         serviceType.setText(ListOfSubServices.parentServiceModel.getName());
 
-        date.setText(ChooseServiceOptions.daySelected.replace("\n"," "));
+        date.setText(ChooseServiceOptions.daySelected.replace("\n", " "));
         time.setText(ChooseServiceOptions.timeSelected);
         buildingType.setText(ChooseServiceOptions.buildingType);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BookingSumary.this, ChooseAddress.class));
+                if (ConnectivityManager.isNetworkConnected(BookingSumary.this)) {
+                    startActivity(new Intent(BookingSumary.this, ChooseAddress.class));
+                } else {
+                    CommonUtils.showToast("Please check internet connection");
+                }
             }
         });
 

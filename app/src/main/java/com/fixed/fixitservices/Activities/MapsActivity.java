@@ -176,8 +176,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 String city = GetAddress.getCity(MapsActivity.this, lat, lng);
-                if (!SharedPrefs.getAdminModel().getProvidingServiceInCities().contains(city)) {
-                    CommonUtils.showToast("We are not providing services in this area");
+                if (SharedPrefs.getAdminModel() != null) {
+                    if (!SharedPrefs.getAdminModel().getProvidingServiceInCities().contains(city)) {
+                        CommonUtils.showToast("We are not providing services in this area");
+                    } else {
+                        Intent intent = new Intent();
+                        intent.putExtra("address", CommonUtils.getFullAddress(MapsActivity.this, lat, lng));
+                        intent.putExtra("lat", lat);
+                        intent.putExtra("lon", lng);
+
+                        User user = SharedPrefs.getUser();
+                        if (user != null) {
+                            user.setGoogleAddress(CommonUtils.getFullAddress(MapsActivity.this, lat, lng));
+                            user.setLat(lat);
+                            user.setLon(lng);
+                        }
+                        SharedPrefs.setUser(user);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                 } else {
                     Intent intent = new Intent();
                     intent.putExtra("address", CommonUtils.getFullAddress(MapsActivity.this, lat, lng));

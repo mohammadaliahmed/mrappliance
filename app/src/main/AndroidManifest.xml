@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.fixed.fixitservices">
+    package="com.appsinventiv.mrappliance">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
-        android:name=".ApplicationClass"
+        android:name="com.appsinventiv.mrappliance.ApplicationClass"
         android:allowBackup="true"
         android:appComponentFactory="whateverString"
         android:icon="@mipmap/ic_launcher"
@@ -20,54 +20,50 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".UserManagement.MobileVerification" />
+        <activity android:name="com.appsinventiv.mrappliance.UserManagement.MobileVerification" />
         <activity
-            android:name=".UserManagement.Login"
+            android:name="com.appsinventiv.mrappliance.UserManagement.Login"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".UserManagement.LoginMenu" />
+        <activity android:name="com.appsinventiv.mrappliance.UserManagement.LoginMenu" />
         <activity
-            android:name=".UserManagement.Register"
+            android:name="com.appsinventiv.mrappliance.UserManagement.Register"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Activities.Splash">
+        <activity android:name="com.appsinventiv.mrappliance.Activities.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Services.ListOfServices" />
-        <activity android:name=".Services.ListOfSubServices" />
-        <activity android:name=".Services.ChooseServiceOptions" />
-        <activity android:name=".Activities.GPSTrackerActivity" />
+        <activity android:name="com.appsinventiv.mrappliance.Services.ListOfServices" />
+        <activity android:name="com.appsinventiv.mrappliance.Services.ListOfSubServices" />
+        <activity android:name="com.appsinventiv.mrappliance.Services.ChooseServiceOptions" />
+        <activity android:name="com.appsinventiv.mrappliance.Activities.GPSTrackerActivity" />
         <activity
-            android:name=".Activities.ViewInvoice"
+            android:name="com.appsinventiv.mrappliance.Activities.ViewInvoice"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.MyOrders" />
-        <activity android:name=".Activities.BookingSumary" />
-        <activity android:name=".Activities.ChooseAddress" />
-        <activity android:name=".Activities.ModifiedOrder" />
+        <activity android:name="com.appsinventiv.mrappliance.Activities.MyOrders" />
+        <activity android:name="com.appsinventiv.mrappliance.Activities.BookingSumary" />
+        <activity android:name="com.appsinventiv.mrappliance.Activities.ChooseAddress" />
+        <activity android:name="com.appsinventiv.mrappliance.Activities.ModifiedOrder" />
         <activity
-            android:name=".UserManagement.EditProfile"
+            android:name="com.appsinventiv.mrappliance.UserManagement.EditProfile"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Activities.OrderPlaced" />
+        <activity android:name="com.appsinventiv.mrappliance.Activities.OrderPlaced" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name=".Utils.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".Utils.MyFirebaseMessagingService">
+
+        <service android:name="com.appsinventiv.mrappliance.Utils.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name="com.appsinventiv.mrappliance.Activities.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -88,7 +84,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".Activities.MapsActivity"
+            android:name="com.appsinventiv.mrappliance.Activities.MapsActivity"
             android:label="@string/title_activity_maps" />
 
         <meta-data
@@ -112,9 +108,14 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Notifications.NotificationHistory" />
-        <activity android:name=".Bills.ListOfBills" />
-        <activity android:name=".Activities.SocialScreen" />
+        <activity android:name="com.appsinventiv.mrappliance.Notifications.NotificationHistory" />
+        <activity android:name="com.appsinventiv.mrappliance.Bills.ListOfBills" />
+        <activity android:name="com.appsinventiv.mrappliance.Activities.SocialScreen" />
+        <activity android:name=".Activities.ViewQuotation" />
+        <activity android:name=".Activities.TrackOrder" />
+        <activity android:name=".Activities.ViewLogs" />
+        <activity android:name=".Activities.ChatManagement.LiveChat" />
+        <activity android:name=".Activities.ViewPictures" />
     </application>
 
 </manifest>

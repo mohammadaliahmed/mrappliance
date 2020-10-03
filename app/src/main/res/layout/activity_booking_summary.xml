@@ -34,16 +34,18 @@
             android:layout_height="1dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30sp"
-            android:layout_marginRight="70dp"
+            android:layout_marginRight="20dp"
             android:background="#000" />
 
 
         <ImageView
             android:layout_width="60dp"
+
             android:layout_height="60dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:src="@drawable/homelogo" />
+            android:src="@drawable/homelogo"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -234,6 +236,47 @@
                         android:background="#000" />
 
                 </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pickedPictures"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/pickPictures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+
+                    android:background="@drawable/curved_colord"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
+
+                    <ImageView
+
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_camera" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+
+                        android:text="Select Pictures"
+                        android:textColor="#fff"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
             </LinearLayout>
 

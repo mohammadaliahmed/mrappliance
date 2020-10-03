@@ -29,6 +29,8 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:visibility="invisible"
+
                 android:layout_alignParentRight="true"
 
                 android:layout_margin="10dp"
@@ -357,7 +359,7 @@
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Mat.bill Rs 500"
+                        android:text="Mat.bill AED 500"
                         android:textColor="#000"
                         android:textSize="10sp" />
 
@@ -369,7 +371,7 @@
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="10% Mat. Bill : Rs 100"
+                        android:text="10% Mat. Bill : AED 100"
                         android:textColor="#000"
                         android:textSize="11sp" />
 

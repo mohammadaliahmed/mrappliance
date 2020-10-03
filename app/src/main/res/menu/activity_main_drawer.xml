@@ -5,9 +5,18 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/user"
+            android:title="Profile" />
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_about"
             android:title="About" />
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_chat"
+            android:title="Chat" />
+
         <item
             android:id="@+id/nav_notifications"
             android:icon="@drawable/notification"
@@ -18,10 +27,12 @@
             android:title="Terms and conditions" />
         <item
             android:id="@+id/nav_rate_list"
+            android:visible="false"
             android:icon="@drawable/ic_rate_list"
             android:title="Rate List" />
         <item
             android:id="@+id/nav_service_area"
+            android:visible="false"
             android:icon="@drawable/ic_service_area"
             android:title="Service Area" />
         <item
@@ -34,6 +45,7 @@
             android:title="Feedback" />
         <item
             android:id="@+id/nav_social"
+            android:visible="false"
             android:icon="@drawable/user"
             android:title="Social" />
         <item

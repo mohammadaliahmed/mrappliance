@@ -34,7 +34,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30sp"
-            android:layout_marginRight="70dp"
+            android:layout_marginRight="20dp"
             android:background="#000" />
 
 
@@ -42,6 +42,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentRight="true"
+            android:visibility="invisible"
+
             android:layout_marginRight="10dp"
             android:src="@drawable/homelogo" />
     </RelativeLayout>
@@ -87,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="33dp"
-                android:text="FIXEDIT official"
+                android:text="MR APPLIANCE official"
                 android:textSize="12sp" />
 
             <Button
@@ -134,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="33dp"
-                android:text="FIXEDIT official"
+                android:text="MR APPLIANCE official"
                 android:textSize="12sp" />
 
             <Button
@@ -181,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="33dp"
-                android:text="FIXEDIT official"
+                android:text="MR APPLIANCE official"
                 android:textSize="12sp" />
 
             <Button
@@ -228,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="33dp"
-                android:text="FIXEDIT official"
+                android:text="MR APPLIANCE official"
                 android:textSize="12sp" />
 
             <Button
@@ -275,7 +277,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="33dp"
-                android:text="FIXEDIT official"
+                android:text="MR APPLIANCE official"
                 android:textSize="12sp" />
 
             <Button

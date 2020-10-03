@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FIXEDIT Services</string>
+    <string name="app_name">Mr Appliance</string>
     <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -12,8 +12,8 @@
     <string name="title_activity_maps">Map</string>
 
     <!--<string name="facebook_app_id">849090152129341</string>-->
-    <string name="facebook_app_id" translatable="false">410856366452895</string>
-    <string name="fb_login_protocol_scheme">fb410856366452895</string>
+    <string name="facebook_app_id">254941142147241</string>
+    <string name="fb_login_protocol_scheme">fb254941142147241</string>
     <string name="title_activity_maps2">Map</string>
 
 </resources>

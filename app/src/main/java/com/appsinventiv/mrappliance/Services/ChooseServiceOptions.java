@@ -39,7 +39,7 @@ public class ChooseServiceOptions extends AppCompatActivity {
     RelativeLayout next;
     RelativeLayout commercial, residential, villa;
     ImageView commercialTick, residentialTick, villaTick;
-    public static String buildingType;
+    public static String buildingType="Residential";
     public static String timeSelected;
     public static String monthSelected, daySelected;
     DatabaseReference mDatabase;
@@ -164,12 +164,10 @@ public class ChooseServiceOptions extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                buildingType="Residential";
                 if (timeSelected == null) {
                     CommonUtils.showToast("Select available time slot");
 
-                } else if (buildingType == null) {
-                    CommonUtils.showToast("Select building type");
                 } else {
 
                     if (ConnectivityManager.isNetworkConnected(ChooseServiceOptions.this)) {

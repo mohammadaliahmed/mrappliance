@@ -48,10 +48,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/homelogo"
+            android:src="@drawable/logopng"
 
             android:visibility="visible" />
 

@@ -82,7 +82,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         } else {
             holder.order.setText("Order Id: " + model.getOrderId()
                     + "\n\nOrder Status: " + model.getOrderStatus()
-                    + "\n\nEstimated cost: AED" + model.getTotalPrice()  + (model.getTotalPrice() ));
+                    + "\n\nEstimated cost: AED" + model.getTotalPrice()  );
 
         }
 
